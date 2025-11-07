@@ -7,6 +7,7 @@ import {
   Req,
   Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import type { Response, Request } from 'express';
 import { AuthService } from './auth.service';
@@ -14,6 +15,8 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtUser } from 'src/types';
 import { ConfigService } from '@nestjs/config';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -22,12 +25,15 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
-  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { ttl: 60000, limit: 3 } })
+  @HttpCode(HttpStatus.CREATED)
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
 
+  @Throttle({ default: { ttl: 60000, limit: 5 } })
+  @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(
     @Body() dto: LoginDto,
@@ -65,6 +71,7 @@ export class AuthController {
     return { message: 'Successfully signed in!', user };
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('refresh')
   async refreshToken(
     @Req() request: Request,
@@ -95,6 +102,8 @@ export class AuthController {
     return { message: 'Token refreshed successfully!' };
   }
 
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
   @Post('logout')
   logOut(
     @Req() request: Request,

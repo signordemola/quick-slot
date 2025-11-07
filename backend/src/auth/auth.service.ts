@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,7 +9,12 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { hashPassword, verifyPassword } from 'src/utils/password';
-import { AuthSignInResponse, JwtPayload, Tokens } from 'src/types';
+import {
+  AuthResponse,
+  AuthSignInResponse,
+  JwtPayload,
+  Tokens,
+} from 'src/types';
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
@@ -38,7 +44,7 @@ export class AuthService {
     };
   }
 
-  async register(dto: RegisterDto): Promise<{ message: string }> {
+  async register(dto: RegisterDto): Promise<AuthResponse> {
     const existingUser = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -59,7 +65,10 @@ export class AuthService {
       },
     });
 
-    return { message: 'User registered successfully!' };
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'User registered successfully!',
+    };
   }
 
   async login(dto: LoginDto): Promise<AuthSignInResponse> {
