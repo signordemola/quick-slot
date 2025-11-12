@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { BusinessModule } from './business/business.module';
+import { StaffModule } from './staff/staff.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { APP_GUARD } from '@nestjs/core';
     AuthModule,
     UserModule,
     PrismaModule,
+    BusinessModule,
+    StaffModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
