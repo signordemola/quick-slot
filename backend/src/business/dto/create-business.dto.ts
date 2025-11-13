@@ -21,37 +21,37 @@ export class CreateBusinessDto {
   @MaxLength(500)
   description?: string;
 
-  @ApiProperty({ example: 'owner@mybusiness.com' })
+  @ApiProperty({ example: 'owner@mybusiness.com', required: false })
   @IsOptional()
   @IsEmail()
   email?: string;
 
-  @ApiProperty({ example: '+1234567890' })
+  @ApiProperty({ example: '+1234567890', required: false })
   @IsOptional()
   @IsString()
   phoneNumber?: string;
 
-  @ApiProperty({ example: '123 Business St.' })
+  @ApiProperty({ example: '123 Business St.', required: false })
   @IsOptional()
   @IsString()
   address?: string;
 
-  @ApiProperty({ example: 'Lagos State' })
+  @ApiProperty({ example: 'Lagos State', required: false })
   @IsOptional()
   @IsString()
   city?: string;
 
-  @ApiProperty({ example: 'Nigeria' })
+  @ApiProperty({ example: 'Nigeria', required: false })
   @IsOptional()
   @IsString()
   country?: string;
 
-  @ApiProperty({ example: 'Africa/Lagos' })
+  @ApiProperty({ example: 'Africa/Lagos', required: false })
   @IsOptional()
   @IsString()
   timezone?: string;
 
-  @ApiProperty({ example: 'NGN' })
+  @ApiProperty({ example: 'NGN', required: false })
   @IsOptional()
   @IsString()
   currency?: string;
@@ -61,6 +61,7 @@ export class CreateBusinessDto {
       monday: { open: '09:00', close: '17:00', closed: false },
       tuesday: { open: '09:00', close: '17:00', closed: false },
     },
+    required: false,
   })
   @IsOptional()
   @IsObject()
