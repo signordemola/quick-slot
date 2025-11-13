@@ -38,7 +38,7 @@ export class BusinessController {
     };
   }
 
-  @Post('create')
+  @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.BUSINESS_OWNER)
   @HttpCode(HttpStatus.CREATED)

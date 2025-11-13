@@ -137,6 +137,7 @@ model Service {
   staff             Staff        @relation(fields: [staffId], references: [id], onDelete: Cascade)
   bookings          Booking[]
 
+  @@unique([businessId, staffId, name])
   @@index([businessId])
   @@index([staffId])
   @@index([isActive])
